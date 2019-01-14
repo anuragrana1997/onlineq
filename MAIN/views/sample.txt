@@ -1,0 +1,38 @@
+
+<form action='/teacher' style="border:1px solid #ccc" method="POST">
+  <div class="container">
+    <h1>Add Question</h1>
+    <hr>
+    <label for="Question"><b>Question</b></label>
+    <input type="text" placeholder="Enter Question" name="Question" required>
+
+    <label for="o1"><b>Option 1</b></label>
+    <input type="text" placeholder="Enter Option" name="o1" required>
+
+    <label for="o2"><b>Option 2</b></label>
+    <input type="text" placeholder="Enter Option" name="o2" required>
+
+    <label for="o3"><b>Option 3</b></label>
+    <input type="text" placeholder="Enter Option" name="o3" required>
+
+    <label for="o4"><b>Option 4</b></label>
+    <input type="text" placeholder="Enter Option" name="o4" required>
+
+    <label for="correct"><b>Enter Correct Option<b></label>
+    <input type="text" placeholder="Correct Option 1,2,3 or 4" name="correct" required>
+
+
+    <div class="clearfix">
+      <a href="/teacher"><button type="submit" class="signupbtn">Add Question</button></a>
+    </div>
+  </div>
+</form>
+<% for( var i=0; i < qlist.length; i++){ %>
+  <p><%= i+1 %>.) <%= qlist[i].Question %> </p>
+  <ol>
+    <li><%= qlist[i].o1 %></li>
+    <li><%= qlist[i].o2 %></li>
+    <li><%= qlist[i].o3 %></li>
+    <li><%= qlist[i].o4 %></li>
+</ol>
+   <% } %>

@@ -1,0 +1,115 @@
+module.exports=function(app,UserS,QuestionS){
+var session = require('express-session');
+var express=require('express');
+var bodyparser=require('body-parser');
+const mongoose=require('mongoose');
+const Schema=mongoose.Schema;
+var ObjectID = require('mongodb').ObjectID;
+mongoose.Promise=global.Promise;
+var assert=require('assert');
+var adm=require('./admin.js');
+var teach=require('./teacher.js');
+var stud=require('./student.js')
+var exec=require('exec');
+var sess;
+
+var urlencodedparser=bodyparser.urlencoded({extended:false});
+
+
+mongoose.connect('mongodb://localhost/test',{ useNewUrlParser: true });
+var conn=mongoose.connection;
+
+adm(app,UserS,QuestionS);
+teach(app,UserS,QuestionS);
+stud(app,UserS,QuestionS);
+app.set('view engine','ejs');
+app.use('/images', express.static('images'));
+app.use(session({secret:'gg'}));
+
+app.get('/login',function(req,res){
+  req.session;
+  if(req.session.type==2)
+  {
+    res.render('studenthome');
+  }
+  else if(req.session.type==0)
+  {
+    res.render('adminhome');
+  }
+  else if(req.session.type==1)
+  {
+    res.redirect('teacherhome');
+  }
+  else
+  {
+  res.render('login',{qs: req.query});
+}
+});
+
+
+app.get('/signup',function(req,res){
+  res.render('signup',{qs: req.query});
+});
+
+
+
+app.post('/login',urlencodedparser,function(req,res){
+  conn.collection('Users').findOne({email:req.body.email},function(err,result){
+    if(err)
+    {
+      throw err;
+    }
+    if(result)
+    {
+      if(result.psw===req.body.psw && result.status=="active")
+      {
+        req.session.email=req.body.email;
+        req.session.psw=req.body.psw;
+        if(result.type==0)
+        {
+            res.redirect('adminhome');
+        }
+        else if(result.type==1)
+        {
+            res.redirect('teacherhome');
+        }
+        else {
+          res.redirect('studenthome');
+        }
+      }
+      else
+      {
+        res.render('login');
+      }
+    }
+    res.end();
+  });
+});
+
+app.get('/logout',function(req,res){
+  req.session.destroy(function(err){
+    if(err)
+    console.log(err);
+    else {
+      res.redirect('login');
+    }
+  });
+  res.redirect('login');
+});
+
+app.post('/signup',urlencodedparser,function(req,res){
+  var data=req.body;
+  var gg="active";
+  var user=new UserS({
+    uname: data.uname,
+    email: data.email,
+    psw: data.psw,
+    college: data.college,
+    dept: data.dept,
+    type: 2,
+    status: gg
+  });
+  conn.collection('Users').insertOne(user);
+  res.render('login',{qs: req.query});
+});
+};

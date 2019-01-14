@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Student</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {height: 900px}
+
+    input[type=text], input[type=password], input[type=email] {
+      width: 100%;
+      padding: 15px;
+      margin: 5px 0 22px 0;
+      display: inline-block;
+      border: none;
+      background: #f1f1f1;
+    }
+
+    input[type=text]:focus, input[type=password]:focus ,input[type=email]:focus {
+      background-color: #ddd;
+      outline: none;
+    }
+
+    hr {
+      border: 1px solid #f1f1f1;
+      margin-bottom: 25px;
+    }
+
+    /* Set a style for all buttons */
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 25%;
+      opacity: 0.9;
+    }
+
+    button:hover {
+      opacity:1;
+    }
+
+    /* Extra styles for the cancel button */
+    .cancelbtn {
+      padding: 14px 20px;
+      background-color: #f44336;
+    }
+
+    /* Float cancel and signup buttons and add an equal width */
+    .cancelbtn, .signupbtn {
+      float: left;
+      width: 50%;
+    }
+
+    /* Add padding to container elements */
+    .container {
+      padding: 16px;
+    }
+
+    /* Clear floats */
+    .clearfix::after {
+      content: "";
+      clear: both;
+      display: table;
+    }
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text and some padding */
+    footer {
+      background-color: #555;
+      color: white;
+      padding: 15px;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {height: auto;}
+    }
+  </style>
+  <script>
+  function myFunction(id,y) {
+  var gg=document.querySelector('input[name="group"]:checked').value;
+  if (gg==y) {
+    document.getElementById(id).innerHTML="Correct";
+  } else {
+    document.getElementById(id).innerHTML="inCorrect";
+  }
+}
+  </script>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Logo</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="/studenttest">Tests</a></li>
+        <li><a href="#">DashBoard</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="/logout"><span class="glyphicon glyphicon-log-in"></span> LogOut</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid text-center">
+  <div class="row content">
+    <div class="col-sm-2 sidenav">
+
+    </div>
+    <div class="col-sm-8 text-left">
+      <% for( var i=0; i < testlist.length; i++){ %>
+        <form action="/studenttest" method="POST" name="myform">
+        <p><b><%= i+1 %>.) <%= testlist[i].Question %> </b></p>
+        <ol>
+          <li><input type="radio" name="group" value="1" ><%= testlist[i].o1 %></input></li>
+          <li><input type="radio" name="group" value="2" ><%= testlist[i].o2 %></input></li>
+          <li><input type="radio" name="group" value="3" ><%= testlist[i].o3 %></input></li>
+          <li><input type="radio" name="group" value="4" ><%= testlist[i].o4 %></input></li>
+      </ol>
+      <p id="<%= testlist[i].Question %>"></p>
+      <button class="but8" type="button" onclick="myFunction('<%= testlist[i].Question %>','<%= testlist[i].correct %>')">Submit</button>
+    </form>
+         <% } %>
+         <center>
+         <a href="/Endtest"><button type="submit">End test</button></a>
+       </center>
+      <hr>
+    </div>
+    <div class="col-sm-2 sidenav">
+    </div>
+  </div>
+</div>
+
+<footer class="container-fluid text-center">
+  <p>-_-</p>
+</footer>
+
+</body>
+</html>
